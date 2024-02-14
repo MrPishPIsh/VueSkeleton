@@ -1,3 +1,23 @@
 body {
     background: #64748b;
 }
+
+button {
+    font-weight: bold;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: aliceblue;
+}
+
+td, th {
+    border: 1px solid #000000;
+    text-align: left;
+    padding: 8px;
+}
+
+td button {
+    width: 100%;
+}
