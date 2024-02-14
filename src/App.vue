@@ -9,9 +9,12 @@ class Activity {
     this.description = description;
   }
 
-  static toggledItemCompleted(element, activity) {
+  static toggleCompleted(activity) {
     activity.isCompleted = !activity.isCompleted;
-    element.innerText = activity.isCompleted;
+  }
+
+  static getCompletionColor(activity) {
+    return activity.isCompleted ? 'green' : 'red';
   }
 }
 
@@ -88,7 +91,10 @@ watch(registry, (newRegistry) => {
         <td>{{ key }}</td>
         <td>{{ item.description }}</td>
         <td>
-          <button @click="Activity.toggledItemCompleted(this, item)">{{ item.isCompleted }}</button>
+          <button 
+            :style="{ color: 'white', background: Activity.getCompletionColor(item) }" 
+            @click="Activity.toggleCompleted(item)">{{ item.isCompleted }}
+          </button>
         </td>
         <td>
           <button @click="registry.delete(key)">Remove</button>
