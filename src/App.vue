@@ -1,18 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, toHandlerKey } from 'vue'
-
-const msg = 'Todo App';
-
-function createTableCell(data) {
-  let cell = document.createElement("td");
-  if (typeof data === 'number' || typeof data === 'string') {
-    cell.innerText = data;
-    return cell;
-  }
-
-  cell.appendChild(data);
-  return cell;
-}
+import { ref, watch } from 'vue'
 
 class Activity {
   description = "";
@@ -22,24 +9,9 @@ class Activity {
     this.description = description;
   }
 
-  toggledCompleted(element) {
-    this.isCompleted = !this.isCompleted;
-    element.innerText = this.isCompleted;
-    element.style.background = this.isCompleted ? 'green' : 'red';
-  }
-
-  toTableRow(index) {
-    let row = document.createElement("tr");
-    row.appendChild(createTableCell(index));
-    row.appendChild(createTableCell(this.description));
-    
-    let button = document.createElement("button");
-    button.innerText = this.isCompleted;
-    button.style.background = 'red';
-    button.onclick = () => this.toggledCompleted(button);
-    row.appendChild(createTableCell(button)); 
-
-    return row;
+  static toggledItemCompleted(element, activity) {
+    activity.isCompleted = !activity.isCompleted;
+    element.innerText = activity.isCompleted;
   }
 }
 
@@ -62,6 +34,11 @@ class ActivityRegistry extends Map {
     return largestIndex;
   }
 
+  toJson() {
+    let entryArray = Array.from(this.entries());
+    return JSON.stringify(entryArray);
+  }
+
   /**
    * Creates and adds a new activity to the registry with a given description.
    * @param {String} description 
@@ -69,25 +46,24 @@ class ActivityRegistry extends Map {
   add() {
     let index = this.getLargestIndex() + 1;
     let description = prompt("Input activity description: ");
-    let activity = new Activity(description);
-    this.set(index, activity);
-
-    let row = activity.toTableRow(index);
-    let deleteButton = document.createElement("button");
-    deleteButton.innerText = "Remove";
-    deleteButton.onclick = () => {
-      this.delete(index);
-      row.remove();
-    };
-
-    row.appendChild(createTableCell(deleteButton));
-
-    let table = document.getElementById("activity-registry");
-    table.appendChild(row);
+    this.set(index, new Activity(description));
   }
 }
 
-const registry = ref(new ActivityRegistry());
+const msg = 'Todo App';
+
+const registryStorageName = "registries"
+let registry = ref(new ActivityRegistry());
+
+const registryJson = localStorage.getItem(registryStorageName);
+if (registryJson !== null) {
+  let jsonStream = JSON.parse(registryJson);
+  registry = ref(new ActivityRegistry(jsonStream))
+}
+
+watch(registry, (newRegistry) => {
+  localStorage.setItem(registryStorageName, newRegistry.toJson());
+}, { deep: true });
 
 </script>
 
@@ -99,7 +75,7 @@ const registry = ref(new ActivityRegistry());
   <div>
     <button type="button" @click="registry.add()">Add Activity</button>
   </div>
-
+  
   <div>
     <table id="activity-registry">
       <tr>
@@ -107,6 +83,16 @@ const registry = ref(new ActivityRegistry());
         <th>Description</th>
         <th>Completed</th>
         <th></th>
+      </tr>
+      <tr v-for="[key, item] in registry">
+        <td>{{ key }}</td>
+        <td>{{ item.description }}</td>
+        <td>
+          <button @click="Activity.toggledItemCompleted(this, item)">{{ item.isCompleted }}</button>
+        </td>
+        <td>
+          <button @click="registry.delete(key)">Remove</button>
+        </td>
       </tr>
     </table>
   </div>
