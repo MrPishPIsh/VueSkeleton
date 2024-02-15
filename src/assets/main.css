@@ -1,24 +1,37 @@
 body {
-    background: #64748b;
+    background: #404755;
+    color: aliceblue;
+    font-family:'Lucida Sans';
 }
 
 button {
+    background-color: #000000;
+    color: white;
+    font-family: 'Lucida Sans';
     font-weight: bold;
+    border-radius: 5px;
+    height: 30px;
 }
 
 table {
-    border-collapse: collapse;
+    color: black;
+    border-collapse: separate;
+    border-radius: 4px;
     width: 100%;
-    background-color: aliceblue;
+    background-color: #ccdfff;
 }
 
 td, th {
-    border: 1px solid #000000;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 4px;
     text-align: left;
     padding: 8px;
     word-wrap: break-word;
+    word-break: break-all;
 }
 
 td button {
     width: 100%;
+    height: auto;
 }

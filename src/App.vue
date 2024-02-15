@@ -12,10 +12,6 @@ class Activity {
   static toggleCompleted(activity) {
     activity.isCompleted = !activity.isCompleted;
   }
-
-  static getCompletionColor(activity) {
-    return activity.isCompleted ? 'green' : 'red';
-  }
 }
 
 class ActivityRegistry extends Map {
@@ -92,7 +88,7 @@ watch(registry, (newRegistry) => {
         <td>{{ item.description }}</td>
         <td>
           <button 
-            :style="{ color: 'white', background: Activity.getCompletionColor(item) }" 
+            :style="{ color: 'white', background: item.isCompleted ? 'green' : 'red' }" 
             @click="Activity.toggleCompleted(item)">{{ item.isCompleted }}
           </button>
         </td>
