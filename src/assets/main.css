@@ -1,16 +1,17 @@
 body {
     background: #404755;
-    color: aliceblue;
+    color: #f0f8f0;
     font-family:'Lucida Sans';
 }
 
 button {
-    background-color: #000000;
+    background-color: #000;
     color: white;
     font-family: 'Lucida Sans';
     font-weight: bold;
     border-radius: 5px;
     height: 30px;
+    cursor: pointer;
 }
 
 table {
@@ -18,12 +19,12 @@ table {
     border-collapse: separate;
     border-radius: 4px;
     width: 100%;
-    background-color: #ccdfff;
+    background-color: #bbd4ff;
 }
 
 td, th {
-    background-color: white;
-    border: 1px solid black;
+    background-color: #fff;
+    border: 1px solid #000;
     border-radius: 4px;
     text-align: left;
     padding: 8px;
@@ -34,4 +35,45 @@ td, th {
 td button {
     width: 100%;
     height: auto;
+}
+
+textarea {
+    width: 99%;
+    resize: none;
+}
+
+.modal {
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    color: #000;
+    background-color: #f8f8f8;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    width: 40%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }

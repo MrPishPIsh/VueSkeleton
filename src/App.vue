@@ -1,5 +1,6 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
+import Modal from './Modal.vue';
 
 class Activity {
   description = "";
@@ -42,17 +43,30 @@ class ActivityRegistry extends Map {
    * Creates and adds a new activity to the registry with a given description.
    * @param {String} description 
    */
-  add() {
+  add(description) {
+    if (description === '' || description === undefined || description === null) 
+      return;
+
     let index = this.getLargestIndex() + 1;
-    let description = prompt("Input activity description: ");
     this.set(index, new Activity(description));
   }
 }
 
-const msg = 'Todo App';
 
-const registryStorageName = "registries"
+const isModalHidden = ref(true);
+function closeModal() {
+  isModalHidden.value = true;
+  description.value = '';
+}
+
+const description = ref('');
+
+const registryStorageName = "registries";
 let registry = ref(new ActivityRegistry());
+function addNewRegistry() {
+  registry.value.add(description.value)
+  description.value = '';
+}
 
 const registryJson = localStorage.getItem(registryStorageName);
 if (registryJson !== null) {
@@ -63,16 +77,15 @@ if (registryJson !== null) {
 watch(registry, (newRegistry) => {
   localStorage.setItem(registryStorageName, newRegistry.toJson());
 }, { deep: true });
-
 </script>
 
 <template>
-  <h1 style="text-align: center;">
-    {{ msg }}
-  </h1>
+  <h1 style="text-align: center;">Todo App</h1>
 
+  <Modal :hidden="isModalHidden" v-model="description" @submit="addNewRegistry()" @closeModal="closeModal()"></Modal>
+  
   <div>
-    <button type="button" @click="registry.add()">Add Activity</button>
+    <button @click="isModalHidden = false">Add Activity</button>
   </div>
   
   <div>
